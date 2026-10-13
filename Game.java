@@ -16,7 +16,7 @@ import javafx.embed.swing.JFXPanel;
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener{
    //Set frame and thus window size 
    private final int WIDTH = 1200; 
-   private final int HEIGHT = 675; 
+   private final int HEIGHT = 875; 
    //Create a boolean for thread operations 
    private boolean running;
    //Create input flags for player
@@ -34,6 +34,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
    private Image player_left;   
    private int direction = 3; 
    private Image current_heading; 
+   private double player_hp = 100.0; 
+   private double player_max_hp = 100.0; 
 
    
    //Set framerate
@@ -129,10 +131,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
       if (direction == 2) {current_heading = player_left;}
       if (direction == 3) {current_heading = player_downward;}
       if (direction == 4) {current_heading = player_right;}
-      if (d_flag == true) {player_x += 1; direction = 4;}
-      if (a_flag == true) {player_x -= 1; direction = 2;} 
-      if (w_flag == true) {player_y -= 1; direction = 1;}
-      if (s_flag == true) {player_y += 1; direction = 3;} 
+      //current barrier values are based on unequal player sprite values, later we should change player sprite to square and then have set size and just set boundaries to half of that size + constants. 
+      if (d_flag == true) {direction = 4; if(player_x == 950) {} else {player_x += 1;}}
+      if (a_flag == true) {direction = 2; if(player_x == 0) {} else {player_x -= 1;}} 
+      if (w_flag == true) {direction = 1; if(player_y == 0) {} else {player_y -= 1;}}
+      if (s_flag == true) {direction = 3; if (player_y == 450) {} else {player_y += 1;}} 
    }
    //graphic update command 
    @Override 
@@ -141,8 +144,26 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
       g.setColor(Color.black);
       //System.out.println("Repaint: X: " + player_x); 
       if (current_heading != null) {
-         g.drawImage(current_heading, player_x, player_y, this);}
-    update();}
+         g.drawImage(current_heading, player_x, player_y, this);
+      }
+      
+      //Set up basic GUI box at bottom 
+      g.setColor(Color.white);
+      g.fillRect(0, 675, 1200, 200);
+      
+      //Blit health 
+      g.setColor(Color.black);
+     //  g.setFont(new Font("Arial", Font.BOLD, 32));
+     //    g.drawString("HP: " + player_hp + "/" + player_max_hp, 50, 750); 
+     g.fillRect(50, 725, 310, 110); 
+     g.setColor(Color.red); 
+     g.fillRect(55, 730, (int) ((player_hp / player_max_hp) * 300.0), 100);
+      
+      update();
+      
+      
+   
+   }
       
       
    
@@ -177,6 +198,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
         //get mouse coords 
         double mx = e.getX(); 
         double my = e.getY(); 
+        
+        player_hp -= 1; 
     }
    //useless   
    @Override

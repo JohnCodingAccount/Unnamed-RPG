@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 //Main class
 public class Main {
    //On run function
-   public static void main(String[] args) {
+   public static void main(String[] args) { 
       //Create new frame to act as game window
       JFrame window = new JFrame(); 
       //Set specific size in game
@@ -28,7 +28,7 @@ public class Main {
       //Make it close when you hit 'x' 
       window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
       //Start up game   
-      game.run(); 
+      //game.startThread(); 
    }
 }
 
